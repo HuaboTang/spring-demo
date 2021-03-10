@@ -24,5 +24,6 @@
 
     <modules>
         <module>demo-spring-jpa</module>
+        <module>spring-task</module>
     </modules>
 </project>
