@@ -25,5 +25,20 @@
     <modules>
         <module>demo-spring-jpa</module>
         <module>spring-task</module>
+        <module>spring-feign</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>self-repo</id>
+            <name>self repo</name>
+            <url>http://www.codrim.net/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: demo-spring-feign-client
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://120.76.201.127:8761/eureka/
+    # eureka client 刷新本地缓存时间，默认30s
+    registry-fetch-interval-seconds: 5
+
+logging:
+  level:
+    org.springframework: debug

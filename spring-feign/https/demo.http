@@ -1,0 +1,4 @@
+GET http://localhost:8080/feign/demo/test
+
+###
+GET http://localhost:8080/feign/demo/test/no/default
