@@ -26,6 +26,7 @@
         <module>demo-spring-jpa</module>
         <module>spring-task</module>
         <module>spring-feign</module>
+        <module>spel</module>
     </modules>
 
     <repositories>
