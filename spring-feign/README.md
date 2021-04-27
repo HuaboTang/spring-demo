@@ -98,33 +98,43 @@ Implementation, no-default
 
 有默认实现的，直接调用了返回了默认实现。没有默认实现的，则调用对应了远程方法。
 
-## 1.2 源码分析
+### 1.2 源码分析
 
 - 在调用处理打断点
 - 进入实际调用的方法
   实际调用的是：feign.ReflectiveFeign.FeignInvocationHandler.invoke
-    ```java
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-          if ("equals".equals(method.getName())) {
-            try {
-              Object otherHandler =
-                  args.length > 0 && args[0] != null ? Proxy.getInvocationHandler(args[0]) : null;
-              return equals(otherHandler);
-            } catch (IllegalArgumentException e) {
-              return false;
-            }
-          } else if ("hashCode".equals(method.getName())) {
-            return hashCode();
-          } else if ("toString".equals(method.getName())) {
-            return toString();
-          }
-    
-          return dispatch.get(method).invoke(args); 
-        }
-    ```
 
+    ```Java
+    // feign-core-10.1.0-sources.jar!/feign/ReflectiveFeign.java:88
+  
+  static class FeignInvocationHandler implements InvocationHandler {
+  
+      @Override
+      public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+          if ("equals".equals(method.getName())) {
+              try {
+                  Object otherHandler =
+                    args.length > 0 && args[0] != null ? Proxy.getInvocationHandler(args[0]) : null;
+                return equals(otherHandler);
+              } catch (IllegalArgumentException e) {
+                return false;
+              }
+          } else if ("hashCode".equals(method.getName())) {
+              return hashCode();
+          } else if ("toString".equals(method.getName())) {
+              return toString();
+          }
+      
+          return dispatch.get(method).invoke(args); 
+      }
+    }
+    ```
+  
+    实际从dispatch从取出`MethodHandler`，dispatch由构造方法初始化，继续找构造方法调用
+  
     ```java
+    // feign-core-10.1.0-sources.jar!/feign/ReflectiveFeign.java:80
+  
     static class FeignInvocationHandler implements InvocationHandler {
     
         private final Target target;
@@ -134,59 +144,68 @@ Implementation, no-default
           this.target = checkNotNull(target, "target");
           this.dispatch = checkNotNull(dispatch, "dispatch for %s", target);
         }
+        ...
+    }
     ```
-    继续往下找哪里调用了FeignInvocationHandler的构造方法
+  
+    继续往下找哪里调用了FeignInvocationHandler的构造方法，在`feign.InvocationHandlerFactory.Default.create`
     ```java
-    @Override
+    // feign.InvocationHandlerFactory.Default.create
+  
+        @Override
         public InvocationHandler create(Target target, Map<Method, MethodHandler> dispatch) {
           return new ReflectiveFeign.FeignInvocationHandler(target, dispatch);
         }
     ```
 
-feign.ReflectiveFeign.newInstance
+    再往下找调用位置，`feign.ReflectiveFeign.newInstance`，在这里根据Method的不同，使用了`DefaultMethodHandler`或者`SynchronousMethodHandler`
 
-```java
-@Override
-  public <T> T newInstance(Target<T> target) {
-    Map<String, MethodHandler> nameToHandler = targetToHandlersByName.apply(target);
-    Map<Method, MethodHandler> methodToHandler = new LinkedHashMap<Method, MethodHandler>();
-    List<DefaultMethodHandler> defaultMethodHandlers = new LinkedList<DefaultMethodHandler>();
-
-    for (Method method : target.type().getMethods()) {
-      if (method.getDeclaringClass() == Object.class) {
-        continue;
-      } else if (Util.isDefault(method)) { // 这里
-        DefaultMethodHandler handler = new DefaultMethodHandler(method);
-        defaultMethodHandlers.add(handler);
-        methodToHandler.put(method, handler);
-      } else {
-        methodToHandler.put(method, nameToHandler.get(Feign.configKey(target.type(), method)));
+  ```java
+  @Override
+    public <T> T newInstance(Target<T> target) {
+      Map<String, MethodHandler> nameToHandler = targetToHandlersByName.apply(target);
+      Map<Method, MethodHandler> methodToHandler = new LinkedHashMap<Method, MethodHandler>();
+      List<DefaultMethodHandler> defaultMethodHandlers = new LinkedList<DefaultMethodHandler>();
+  
+      for (Method method : target.type().getMethods()) {
+        if (method.getDeclaringClass() == Object.class) {
+          continue;
+        } else if (Util.isDefault(method)) { // 这里
+          DefaultMethodHandler handler = new DefaultMethodHandler(method);
+          defaultMethodHandlers.add(handler);
+          methodToHandler.put(method, handler);
+        } else {
+          methodToHandler.put(method, nameToHandler.get(Feign.configKey(target.type(), method)));
+        }
       }
+      InvocationHandler handler = factory.create(target, methodToHandler);
+      T proxy = (T) Proxy.newProxyInstance(target.type().getClassLoader(),
+          new Class<?>[] {target.type()}, handler);
+  
+      for (DefaultMethodHandler defaultMethodHandler : defaultMethodHandlers) {
+        defaultMethodHandler.bindTo(proxy);
+      }
+      return proxy;
     }
-    InvocationHandler handler = factory.create(target, methodToHandler);
-    T proxy = (T) Proxy.newProxyInstance(target.type().getClassLoader(),
-        new Class<?>[] {target.type()}, handler);
+  ```
 
-    for (DefaultMethodHandler defaultMethodHandler : defaultMethodHandlers) {
-      defaultMethodHandler.bindTo(proxy);
+  ```java
+  /**
+     * Identifies a method as a default instance method.
+     */
+    public static boolean isDefault(Method method) {
+      // Default methods are public non-abstract, non-synthetic, and non-static instance methods
+      // declared in an interface.
+      // method.isDefault() is not sufficient for our usage as it does not check
+      // for synthetic methods. As a result, it picks up overridden methods as well as actual default
+      // methods.
+      final int SYNTHETIC = 0x00001000;
+      return ((method.getModifiers()
+          & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC | SYNTHETIC)) == Modifier.PUBLIC)
+          && method.getDeclaringClass().isInterface();
     }
-    return proxy;
-  }
-```
+  ```
 
-```java
-/**
-   * Identifies a method as a default instance method.
-   */
-  public static boolean isDefault(Method method) {
-    // Default methods are public non-abstract, non-synthetic, and non-static instance methods
-    // declared in an interface.
-    // method.isDefault() is not sufficient for our usage as it does not check
-    // for synthetic methods. As a result, it picks up overridden methods as well as actual default
-    // methods.
-    final int SYNTHETIC = 0x00001000;
-    return ((method.getModifiers()
-        & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC | SYNTHETIC)) == Modifier.PUBLIC)
-        && method.getDeclaringClass().isInterface();
-  }
-```
+## 2. 涉及源代码
+
+[源码](https://github.com/HuaboTang/spring-demo/tree/master/spring-feign)
