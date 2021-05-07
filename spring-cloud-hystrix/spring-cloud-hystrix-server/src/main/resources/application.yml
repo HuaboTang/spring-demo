@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: demo-spring-cloud-hystrix-server
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://120.76.201.127:8761/eureka/
+
+logging:
+  level:
+    org.springframework: debug

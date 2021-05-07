@@ -1,0 +1,14 @@
+### test
+GET http://localhost:8080/test
+
+### throw/exception
+GET http://localhost:8080/throw/exception
+
+###throw/exception/no/hystrix
+GET http://localhost:8080/throw/exception/no/hystrix
+
+###
+GET http://localhost:8080/trigger/hystrix
+
+###
+GET http://localhost:8080/trigger/timeout

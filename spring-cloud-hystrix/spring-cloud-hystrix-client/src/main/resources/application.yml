@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: demo-spring-cloud-hystrix-client
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://120.76.201.127:8761/eureka/
+    # eureka client 刷新本地缓存时间，默认30s
+    registry-fetch-interval-seconds: 5
+
+logging:
+  level:
+    org.springframework: debug
+    com.hystrix: debug
+
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 10000
+
+hystrix:
+  thread-pool:
+    default:
+      core-size: 1
+      maximum-size: 1
+  command:
+    default:
+      circuit:
+        breaker:
+          requestVolumeThreshold: 1
+          sleep-window-in-millisends: 10000
+          error-threshold-percentage: 1
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
