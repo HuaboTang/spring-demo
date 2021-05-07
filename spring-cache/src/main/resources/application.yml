@@ -1,0 +1,18 @@
+spring:
+    redis:
+        host: redis.test.com
+        port: 6379
+        password: aliredis
+        timeout: 5000
+        lettuce:
+            pool:
+                max-active: 300
+                min-idle: 100
+                max-idle: 100
+                max-wait: 5000
+            config:
+                #LettuceConnectionFactory类里面有个参数shareNativeConnection，配置为true，则连接池配置无效
+                shareNativeConnection: false
+logging:
+    level:
+        org.springframework: DEBUG
