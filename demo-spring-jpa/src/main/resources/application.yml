@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.internal.ExceptionMapperStandardImpl: OFF
+    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: OFF
+    org.springframework: DEBUG
