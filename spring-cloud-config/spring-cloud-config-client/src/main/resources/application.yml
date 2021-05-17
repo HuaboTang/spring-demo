@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    active: test
+
+
+demo:
+  url: http://www.google.com
+
+logging:
+  level:
+    org.springframework: DEBUG
