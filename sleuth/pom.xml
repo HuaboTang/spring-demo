@@ -7,12 +7,14 @@
         <groupId>com.vbobot.demo</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
         <module>sleuth-client</module>
         <module>sleuth-middle-service</module>
         <module>sleuth-ground-service</module>
+        <module>sleuth-feigh-header</module>
     </modules>
     <artifactId>sleuth</artifactId>
 
@@ -20,5 +22,25 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vbobot.demo</groupId>
+                <artifactId>sleuth-middle-service</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vbobot.demo</groupId>
+                <artifactId>sleuth-feigh-header</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vbobot.demo</groupId>
+                <artifactId>sleuth-ground-service</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

@@ -23,7 +23,7 @@ public class TaskConfiguration {
      * 默认@Async处理bean
      */
     @Bean
-    public TaskExecutor taskExecutor() {
+    public TaskExecutor demoTaskExecutor() {
         final int maxPoolSize = 10;
 
         final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -32,6 +32,9 @@ public class TaskConfiguration {
         executor.setThreadNamePrefix("thread-");
         executor.setQueueCapacity(3 * maxPoolSize);
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+
+        log.info("Init thread pool task executor");
+
         return executor;
     }
 
