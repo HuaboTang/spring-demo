@@ -2,8 +2,6 @@ package com.vbobot.spring.demo.task.init;
 
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -14,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class NewThreadInitialize {
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         log.info("Thread-init");
         new Thread(() -> {

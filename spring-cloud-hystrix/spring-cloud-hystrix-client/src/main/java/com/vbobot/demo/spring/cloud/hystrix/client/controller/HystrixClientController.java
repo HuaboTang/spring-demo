@@ -1,6 +1,7 @@
 package com.vbobot.demo.spring.cloud.hystrix.client.controller;
 
 import com.vbobot.demo.spring.cloud.hystrix.api.HystrixDemoFeign;
+import com.vbobot.demo.spring.cloud.hystrix.client.config.GetUidCircuitBreakerCommand;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,7 @@ public class HystrixClientController {
 
     @GetMapping("/trigger/timeout")
     public String triggerByTimeout() {
-        return hystrixDemoFeign.triggerByTimeout();
+        final GetUidCircuitBreakerCommand command = new GetUidCircuitBreakerCommand("uid", () -> hystrixDemoFeign.triggerByTimeout());
+        return command.execute();
     }
 }

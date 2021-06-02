@@ -7,3 +7,5 @@ spring:
           uri: https://gitee.com/bobot/spring-demo
           search-paths: spring-cloud-config/spring-cloud-config-configs/src/main/resources
           timeout: 10
+
+      allow-override: true

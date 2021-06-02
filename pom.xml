@@ -30,6 +30,7 @@
         <module>spring-cloud-hystrix</module>
         <module>spring-cache</module>
         <module>spring-cloud-config</module>
+        <module>sleuth</module>
     </modules>
 
     <repositories>
