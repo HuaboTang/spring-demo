@@ -18,12 +18,14 @@ public class HystrixConfig {
 
     public HystrixConfig() {
         try {
-            HystrixConcurrencyStrategy target = new ThreadLocalHystrixConcurrencyStrategy();
             HystrixConcurrencyStrategy strategy = HystrixPlugins.getInstance().getConcurrencyStrategy();
             if (strategy instanceof ThreadLocalHystrixConcurrencyStrategy) {
                 // Welcome to singleton hell...
                 return;
             }
+
+            HystrixConcurrencyStrategy target = new ThreadLocalHystrixConcurrencyStrategy();
+
             HystrixCommandExecutionHook commandExecutionHook = HystrixPlugins
                     .getInstance().getCommandExecutionHook();
             HystrixEventNotifier eventNotifier = HystrixPlugins.getInstance()
