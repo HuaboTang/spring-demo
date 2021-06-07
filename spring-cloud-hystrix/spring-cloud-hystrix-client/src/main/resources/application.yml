@@ -26,21 +26,21 @@ feign:
         connect-timeout: 10000
         read-timeout: 10000
 
-hystrix:
-  thread-pool:
-    default:
-      core-size: 1
-      maximum-size: 1
-  command:
-    default:
-      circuit:
-        breaker:
-          requestVolumeThreshold: 1
-          sleep-window-in-millisends: 10000
-          error-threshold-percentage: 1
-      execution:
-        timeout:
-          enabled: true
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
+#hystrix:
+#  thread-pool:
+#    default:
+#      core-size: 1
+#      maximum-size: 1
+#  command:
+#    default:
+#      circuit:
+#        breaker:
+#          requestVolumeThreshold: 1
+#          sleep-window-in-millisends: 10000
+#          error-threshold-percentage: 1
+#      execution:
+#        timeout:
+#          enabled: true
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 10000
