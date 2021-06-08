@@ -1,0 +1,184 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: seata-server-one
+  datasource:
+    url: jdbc:mysql://local.youxin.cloud:3306/seata?rewriteBatchedStatements=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+logging:
+  level:
+    org: debug
+
+#==================================================== Seata ====================================================
+seata:
+  # 是否开启spring-boot 自动装配 default true
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: oryx
+  # 是否开启数据源自动代理
+  enable-auto-data-source-proxy: true
+  data-source-proxy-mode: AT
+  # 是否使用JDK代理作为数据源自动代理的实现方式, default: false, 使用cglib
+  use-jdk-proxy: false
+  excludes-for-auto-proxying: firstClassNameForExclude,secondClassNameForExclude
+  client:
+    rm:
+      # 异步提交缓存队列长度，默认10000，二阶段提交成功，RM异步清理undo队列
+      async-commit-buffer-limit: 10000
+      # 一阶段结果上报TC重试次数
+      report-retry-count: 5
+      # 自动刷新缓存中的表结构
+      table-meta-check-enable: false
+      # 是否上报一阶段成功，1.1.0版本开始，默认为false，可提高不少性能
+      report-success-enable: false
+      saga-branch-register-enable: false
+      saga-json-parser: fastjson
+      saga-retry-persist-mode-update: false
+      saga-compensate-persist-mode-update: false
+      lock:
+        # 校验or占用全局锁重试间隔
+        retry-interval: 10
+        # 校验或占用全局锁重试次数
+        retry-times: 30
+        # 分支事务与其它全局回滚事务冲突时锁策略。默认true, 优先释放本地锁，让回滚成功
+        retry-policy-branch-rollback-on-conflict: true
+    tm:
+      # 一阶段全局提交结果上报TC重试次数，默认1次，建议大于1
+      commit-retry-count: 5
+      # 一阶段全局回滚结果上报TC重试次数，默认1次，建议大于1
+      rollback-retry-count: 5
+      default-global-transaction-timeout: 60000
+      # 降级：开关，默认false, 业务侧，根据连续错误数，自动降级，不走seata事务
+      degrade-check: false
+      # 服务自检周期，单位ms
+      degrade-check-period: 2000
+      # 降级：升降级达标阀值，默认10
+      degrade-check-allow-times: 10
+    undo:
+      # 二阶段回滚镜像校验 默认true开启，false关闭
+      data-validation: true
+      # undo序列化方式
+      log-serialization: jackson
+      # 自定义undo表名
+      log-table: undo_log
+      only-care-update-columns: true
+      compress:
+        enable: true
+        type: zip
+        threshold: 64k
+    load-balance:
+      type: RandomLoadBalance
+      virtual-nodes: 10
+  service:
+    # 事务群组
+    # 事务分组说明。
+    #1.事务分组是什么？
+    #事务分组是seata的资源逻辑，类似于服务实例。在file.conf中的my_test_tx_group就是一个事务分组。
+    #2.通过事务分组如何找到后端集群？
+    #首先程序中配置了事务分组（GlobalTransactionScanner 构造方法的txServiceGroup参数），程序会通过用户配置的配置中心去寻找service.vgroupMapping
+    #.事务分组配置项，取得配置项的值就是TC集群的名称。拿到集群名称程序通过一定的前后缀+集群名称去构造服务名，各配置中心的服务名实现不同。拿到服务名去相应的注册中心去拉取相应服务名的服务列表，获得后端真实的TC服务列表。
+    #3.为什么这么设计，不直接取服务名？
+    #这里多了一层获取事务分组到映射集群的配置。这样设计后，事务分组可以作为资源的逻辑隔离单位，当发生故障时可以快速failover。
+    vgroup-mapping:
+      oryx: default
+    grouplist:
+      default: 127.0.0.1:8091
+    enable-degrade: false
+    disable-global-transaction: false
+  transport:
+    shutdown:
+      wait: 3
+    thread-factory:
+      boss-thread-prefix: NettyBoss
+      worker-thread-prefix: NettyServerNIOWorker
+      server-executor-thread-prefix: NettyServerBizHandler
+      share-boss-worker: false
+      client-selector-thread-prefix: NettyClientSelector
+      client-selector-thread-size: 1
+      client-worker-thread-prefix: NettyClientWorkerThread
+      worker-thread-size: default
+      boss-thread-size: 1
+    type: TCP
+    server: NIO
+    heartbeat: true
+    serialization: seata
+    compressor: none
+    # 客户端事务消息请求是否批量合并发送， default: true
+    enable-client-batch-send-request: true
+  config:
+    type: file
+    consul:
+      server-addr: 127.0.0.1:8500
+    apollo:
+      apollo-meta: http://192.168.1.204:8801
+      app-id: seata-server
+      namespace: application
+      apollo-accesskey-secret: ""
+    etcd3:
+      server-addr: http://localhost:2379
+    nacos:
+      namespace: ""
+      server-addr: 127.0.0.1:8848
+      group: SEATA_GROUP
+      username: ""
+      password: ""
+    zk:
+      server-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username: ""
+      password: ""
+    custom:
+      name: ""
+  registry:
+    type: file
+    file:
+      name: file.conf
+    consul:
+      server-addr: 127.0.0.1:8500
+      acl-token: ""
+    etcd3:
+      server-addr: http://localhost:2379
+    eureka:
+      weight: 1
+      service-url: http://localhost:8761/eureka
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      group: "SEATA_GROUP"
+      namespace: ""
+      username: ""
+      password: ""
+    redis:
+      server-addr: localhost:6379
+      db: 0
+      password: ""
+      timeout: 0
+    sofa:
+      server-addr: 127.0.0.1:9603
+      region: DEFAULT_ZONE
+      datacenter: DefaultDataCenter
+      group: SEATA_GROUP
+      address-wait-time: 3000
+      application: default
+    zk:
+      server-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username: ""
+      password: ""
+    custom:
+      name: ""
+  log:
+    # 日志异常输出概率
+    exception-rate: 100
+
+eureka:
+  client:
+    enabled: false
