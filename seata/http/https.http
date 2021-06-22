@@ -1,0 +1,4 @@
+GET http://localhost:8080/rollback/at/invoker
+
+###
+GET http://localhost:8080/rollback/at/callee

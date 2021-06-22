@@ -31,6 +31,8 @@
         <module>spring-cache</module>
         <module>spring-cloud-config</module>
         <module>sleuth</module>
+        <module>seata</module>
+        <module>rabbitmq</module>
     </modules>
 
     <repositories>
