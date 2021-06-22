@@ -4,6 +4,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
 @EnableFeignClients
 @RestController
 @SpringBootApplication
+@EnableJpaRepositories
 public class DemoSeataServerOneApplication {
     @Resource SeataOneService seataOneService;
 
@@ -35,7 +37,7 @@ public class DemoSeataServerOneApplication {
         try {
             return seataOneService.rollbackAtInvoker();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return "rollback-at-invoker";
     }

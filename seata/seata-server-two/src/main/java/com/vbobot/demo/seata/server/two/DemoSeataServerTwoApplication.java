@@ -3,16 +3,20 @@ package com.vbobot.demo.seata.server.two;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+
+import io.seata.core.context.RootContext;
 
 /**
  * @author Bobo
  * @date 2021/6/7
  */
 @RestController
+@EnableJpaRepositories
 @SpringBootApplication
 public class DemoSeataServerTwoApplication {
     @Resource DemoSeataTwoService demoSeataTwoService;
@@ -25,6 +29,7 @@ public class DemoSeataServerTwoApplication {
 
     @GetMapping("/commit")
     public String commit() {
+        System.out.println(RootContext.getXID());
         return demoSeataTwoService.commit();
     }
 

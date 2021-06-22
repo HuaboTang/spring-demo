@@ -1,10 +1,10 @@
 package com.vbobot.demo.seata.server.two;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DemoSeataTwoService {
     @Resource DemoSeataTwoEntityRepository demoSeataTwoEntityRepository;
 
-    @GlobalTransactional(rollbackFor = Exception.class, name = "ory-demo")
+    @Transactional(rollbackFor = Exception.class)
     public String commit() {
         final DemoSeataTwoEntity entity = new DemoSeataTwoEntity();
         final String name = System.currentTimeMillis() + "";
@@ -26,7 +26,7 @@ public class DemoSeataTwoService {
         return "commit";
     }
 
-    @GlobalTransactional(rollbackFor = Exception.class, name = "rollback")
+    @Transactional(rollbackFor = Exception.class)
     public String rollback() {
         final DemoSeataTwoEntity entity = new DemoSeataTwoEntity();
         final String name = System.currentTimeMillis() + "";
