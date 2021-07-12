@@ -33,6 +33,8 @@
         <module>sleuth</module>
         <module>seata</module>
         <module>rabbitmq</module>
+        <module>eureka-ribbon</module>
+        <module>spring-logger</module>
     </modules>
 
     <repositories>
@@ -48,4 +50,19 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <!--fork:  如果没有该项配置，devtools不会起作用，即应用不会restart -->
+                        <fork>true</fork>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

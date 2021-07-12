@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: demo-spring-logger
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : [line:%line]-%m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : [line:%line]-%m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  file: /Users/tanghuabo/Desktop/tmp/${spring.application.name}/demo_spring_logger.log
+  file.max-size: 1MB
