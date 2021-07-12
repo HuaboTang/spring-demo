@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: demo-eureka-ribbon-service
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9090/eureka/
+
+logging:
+  level:
+    org.springframework: INFO
+    com.netflix: INFO
