@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import io.seata.rm.datasource.DataSourceProxy;
@@ -18,10 +19,12 @@ public class DataSourceConfig {
     @Value("${seata.enable:true}") Boolean seataEnable;
     @Value("${seata.enableAutoDataSourceProxy:true}") Boolean enableAutoDataSourceProxy;
     @Value("${seata.enable-auto-data-source-proxy:true}") Boolean enableAutoDataSourceProxy2;
+    @Resource DataSource dataSource;
 
     @PostConstruct
     public void init() {
         log.info("datasource-config: {}, {}, {}", seataEnable, enableAutoDataSourceProxy, enableAutoDataSourceProxy2);
+        System.out.println("datasource:" + dataSource);
     }
 
 //    @Bean

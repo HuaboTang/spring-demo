@@ -28,7 +28,7 @@ seata:
   data-source-proxy-mode: AT
   # 是否使用JDK代理作为数据源自动代理的实现方式, default: false, 使用cglib
   use-jdk-proxy: false
-  excludes-for-auto-proxying: firstClassNameForExclude,secondClassNameForExclude
+  # excludes-for-auto-proxying: firstClassNameForExclude,secondClassNameForExclude
   client:
     rm:
       # 异步提交缓存队列长度，默认10000，二阶段提交成功，RM异步清理undo队列
@@ -77,6 +77,9 @@ seata:
     load-balance:
       type: RandomLoadBalance
       virtual-nodes: 10
+    support:
+      spring:
+        datasource-autoproxy: true
   service:
     # 事务群组
     # 事务分组说明。
