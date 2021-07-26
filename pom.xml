@@ -35,6 +35,7 @@
         <module>rabbitmq</module>
         <module>eureka-ribbon</module>
         <module>spring-logger</module>
+        <module>spring-boot-actuator</module>
     </modules>
 
     <repositories>
