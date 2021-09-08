@@ -1,6 +1,8 @@
 package com.vbobot.demo.seata.server.two;
 
+import io.seata.spring.boot.autoconfigure.SeataDataSourceAutoConfiguration;
 import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -18,6 +20,7 @@ import io.seata.core.context.RootContext;
 @RestController
 @EnableJpaRepositories
 @SpringBootApplication
+@ImportAutoConfiguration(SeataDataSourceAutoConfiguration.class)
 public class DemoSeataServerTwoApplication {
     @Resource DemoSeataTwoService demoSeataTwoService;
 
