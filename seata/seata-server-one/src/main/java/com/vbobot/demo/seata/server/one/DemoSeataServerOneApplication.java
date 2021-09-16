@@ -1,5 +1,6 @@
 package com.vbobot.demo.seata.server.one;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -21,6 +22,9 @@ import javax.annotation.Resource;
 public class DemoSeataServerOneApplication {
     @Resource SeataOneService seataOneService;
 
+    @Value("${seata.enableAutoDataSourceProxy:true}") Boolean enableAutoDataSourceProxy;
+    @Value("${seata.enable-auto-data-source-proxy:true}") Boolean enableAutoDataSourceProxy2;
+
     public static void main(String[] args) {
         new SpringApplicationBuilder(DemoSeataServerOneApplication.class)
                 .web(WebApplicationType.SERVLET)
@@ -29,6 +33,7 @@ public class DemoSeataServerOneApplication {
 
     @GetMapping("/commit")
     public String commit() {
+        System.out.println(enableAutoDataSourceProxy + "" + enableAutoDataSourceProxy2);
         return seataOneService.commit();
     }
 
