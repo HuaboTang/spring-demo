@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-gateway-server
+
+  cloud:
+    gateway:
+      httpclient:
+        response-timeout: 45s
+      routes:
+        - id: test
+          order: -100
+          uri: lb://gateway-destination-service
+          predicates:
+            - Path=/**
+
+  main:
+    allow-bean-definition-overriding: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka.test.com:8761/eureka/
+
+logging:
+  level:
+    org: DEBUG
+

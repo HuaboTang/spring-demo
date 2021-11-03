@@ -31,6 +31,9 @@ public class QueryDslSubSelectExpression {
                 .where(qScore.subject.name.eq(subjectName), qScore.value.goe(score))
                 .select(qScore.studentId);
         BooleanExpression exp = QStudent.student.id.in(subQuery);
+        exp = exp.or(QStudent.student.name.eq("aaa"));
+        exp = exp.and(QStudent.student.name.eq("bbb"));
+        exp = exp.and(QStudent.student.name.like("name").or(QStudent.student.id.eq(123)));
         Iterable<Student> all = studentRepository.findAll(exp);
         return Lists.newCopyOnWriteArrayList(all);
     }

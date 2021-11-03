@@ -1,70 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.vbobot.parent</groupId>
-        <artifactId>vbobot-pom-parent</artifactId>
-        <version>1.1.0</version>
-    </parent>
+  <parent>
+    <groupId>com.vbobot.parent</groupId>
+    <artifactId>vbobot-pom-parent</artifactId>
+    <version>1.1.0</version>
+  </parent>
 
-    <groupId>com.vbobot.demo</groupId>
-    <artifactId>spring-demo</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  <groupId>com.vbobot.demo</groupId>
+  <artifactId>spring-demo</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+  </properties>
 
-    <modules>
-        <module>demo-spring-jpa</module>
-        <module>spring-task</module>
-        <module>spring-feign</module>
-        <module>spel</module>
-        <module>spring-cloud-hystrix</module>
-        <module>spring-cache</module>
-        <module>spring-cloud-config</module>
-        <module>sleuth</module>
-        <module>seata</module>
-        <module>rabbitmq</module>
-        <module>eureka-ribbon</module>
-        <module>spring-logger</module>
-        <module>spring-boot-actuator</module>
-        <module>spring-boot-redisson-lettuce</module>
-    </modules>
+  <modules>
+    <module>demo-spring-jpa</module>
+    <module>spring-task</module>
+    <module>spring-feign</module>
+    <module>spel</module>
+    <module>spring-cloud-hystrix</module>
+    <module>spring-cache</module>
+    <module>spring-cloud-config</module>
+    <module>sleuth</module>
+    <module>seata</module>
+    <module>rabbitmq</module>
+    <module>eureka-ribbon</module>
+    <module>spring-logger</module>
+    <module>spring-boot-actuator</module>
+    <module>spring-boot-redisson-lettuce</module>
+    <module>spring-cloud-gateway</module>
+  </modules>
 
-    <repositories>
-        <repository>
-            <id>self-repo</id>
-            <name>self repo</name>
-            <url>http://www.codrim.net/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+  <repositories>
+    <repository>
+      <id>self-repo</id>
+      <name>self repo</name>
+      <url>http://www.codrim.net/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <configuration>
-                        <!--fork:  如果没有该项配置，devtools不会起作用，即应用不会restart -->
-                        <fork>true</fork>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <version>${spring-boot.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <configuration>
+            <!--fork:  如果没有该项配置，devtools不会起作用，即应用不会restart -->
+            <fork>true</fork>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
