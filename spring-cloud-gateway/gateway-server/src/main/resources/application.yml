@@ -12,7 +12,8 @@ spring:
       routes:
         - id: test
           order: -100
-          uri: lb://gateway-destination-service
+#          uri: lb://gateway-destination-service
+          uri: http://127.0.0.1:8081
           predicates:
             - Path=/**
 
@@ -23,8 +24,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka.test.com:8761/eureka/
+    enabled: false
 
 logging:
   level:
-    org: DEBUG
+    root: OFF
 

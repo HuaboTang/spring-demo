@@ -23,5 +23,5 @@ eureka:
 
 logging:
   level:
-    org: DEBUG
+    root: OFF
 

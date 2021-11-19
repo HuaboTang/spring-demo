@@ -12,7 +12,7 @@ ribbon:
 demo-eureka-ribbon-service:
   ribbon:
     # 这个是配置ribbon内，定时刷新registry的间隔，demo-eureka-ribbon-service是被调用的服务名
-    ServerListRefreshInterval: 2000
+    serverListRefreshInterval: 2000
 
 eureka:
   # ======== org.springframework.cloud.netflix.eureka.EurekaClientConfigBean =======
