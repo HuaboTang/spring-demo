@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <springProfile name="!local">
+    <!-- 异步日志缓存队列大小，通过logging.async-queue-size 配置，默认1024  -->
+    <springProperty name="asyncQueueSize" source="logging.async-queue-size" defaultValue="1024" />
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+    <appender name="FILE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+      <!--阙值  当队列大小低于这个将丢弃日志 为0的话用不丢弃 -->
+      <discardingThreshold>0</discardingThreshold>
+      <!-- 队列的大小-->
+      <queueSize>${asyncQueueSize}</queueSize>
+      <!-- 不设置neverBolck的话调用的是put方法是阻塞的，设置后调用offer方法是不阻塞的-->
+      <neverBlock>true</neverBlock>
+      <includeCallerData>true</includeCallerData>
+      <appender-ref ref="FILE"/>
+    </appender>
+
+    <root level="INFO">
+      <appender-ref ref="FILE-ASYNC"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="local">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+</configuration>
