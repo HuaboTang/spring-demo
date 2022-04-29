@@ -1,0 +1,26 @@
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : [line:%line]-%m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : [line:%line]-%m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  file: /tmp/${spring.application.name}.log
+  file.name: /tmp/${spring.application.name}.log
+  file.max-size: 15MB
+  level:
+    org.springframework: DEBUG
+    org.springframework.cloud.sleuth.instrument.web.ExceptionLoggingFilter: 'OFF'
+    org.hibernate.internal.ExceptionMapperStandardImpl: 'OFF'
+    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: 'OFF'
+    'cloud.youxin.oryx.metadb.driver.*': ERROR
+  config: ${CONFIG_URI}/all/default/${CONFIG_LABEL}/logback-spring.xml
+  logback:
+    rollingpolicy:
+      max-file-size: 15MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
+  endpoint:
+    env:
+      enabled: true
