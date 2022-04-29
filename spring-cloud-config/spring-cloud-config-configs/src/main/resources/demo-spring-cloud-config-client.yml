@@ -18,3 +18,12 @@ logging:
   logback:
     rollingpolicy:
       max-file-size: 1MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
+  endpoint:
+    env:
+      enabled: true
